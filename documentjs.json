@@ -1,0 +1,17 @@
+{
+  "sites": {
+    "docs": {
+      "dest": "docs",
+      "parent": "can-react",
+      "pageConfig": {
+        "page": "docs"
+      },
+      "glob": {
+        "ignore": [
+          "node_modules/**/*"
+        ],
+        "pattern": "**/*.{js,md}"
+      }
+    }
+  }
+}

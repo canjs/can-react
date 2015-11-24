@@ -1,0 +1,37 @@
+{
+  "name": "can-react",
+  "version": "0.0.0",
+  "description": "A compatibility layer required to enable donejs-react.",
+  "main": "can-react.js",
+  "scripts": {
+    "test": "npm run jshint",
+    "jshint": "jshint can-react.js extensions/. --config",
+    "document": "documentjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/canjs/can-react.git"
+  },
+  "keywords": [
+    "CanJS",
+    "DoneJS",
+    "React"
+  ],
+  "author": "Bitovi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/canjs/can-react/issues"
+  },
+  "homepage": "https://github.com/canjs/can-react#readme",
+  "dependencies": {
+    "can": "~2.3.2",
+    "can-connect": "~0.3.3",
+    "can-ssr": "~0.10.1",
+    "jquery": "~2.1.4",
+    "react": "~0.14.3"
+  },
+  "devDependencies": {
+    "documentjs": "^0.3.6",
+    "jshint": "^2.8.0"
+  }
+}
