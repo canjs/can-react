@@ -43,7 +43,7 @@ class BaseComponent extends React.Component {
 	}
 
 	render () {
-		console.log("Rendering Name Tree", BaseComponent.RenderNameTree.join(" >> "));
+		console.log("Rendering Name Tree", this.name);
 		return this.renderer();
 	}
 }
