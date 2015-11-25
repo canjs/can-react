@@ -32,3 +32,5 @@ AppMap.prototype.readyPromise = function () {
 	}
 	return this.__readyPromise;
 };
+
+export default AppMap;

@@ -19,10 +19,10 @@ class BaseComponent extends React.Component {
 		can.dev.warn("Calling'", methodName, "'on a component is indicative of improper use of the can-react component and will not produce the results you expect. Views should access properties using this.state.attr('propertyName') and application code should update these properties using this.state.attr('propertyName', newValue).");
 	}
 	setState () {
-		return misusedMethod("setState");
+		return this.misusedMethod("setState");
 	}
 	forceUpdate () {
-		return misusedMethod("forceUpdate");
+		return this.misusedMethod("forceUpdate");
 	}
 	//!steal-remove-end
 
@@ -43,7 +43,7 @@ class BaseComponent extends React.Component {
 	}
 
 	render () {
-		console.log("Rendering Name Tree", this.name);
+		console.log("Rendering", this.name);
 		return this.renderer();
 	}
 }
@@ -73,6 +73,12 @@ export default {
 					}
 					//!steal-remove-end
 				}
+
+				//!steal-remove-start
+				if (!this.state.appMap || this.state.appMap.pageData) {
+					can.dev.warn("When using the can-react component, it is encouraged to set the 'appMap' prop so that the component can load data asyncronously and take advantage of server side rendering: <YourComponent appMap={this.props.appMap} />");
+				}
+				//!steal-remove-end
 				
 				this.renderer = can.compute(proto.render.bind(this));
 			}

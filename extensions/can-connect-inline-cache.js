@@ -20,7 +20,6 @@ import sortedSetJSON from "can-connect/helpers/sorted-set-json";
  */
 class SyncPromise {
 	constructor (fn) {
-		this._id = Math.random();
 		fn((data) => {
 			this.__data = data;
 			return this;
