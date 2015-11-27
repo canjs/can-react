@@ -23,7 +23,7 @@ class SyncPromise {
 		fn((data) => {
 			this.__data = data;
 			return this;
-		})
+		});
 	}
 
 	static resolve (data) {
@@ -47,8 +47,8 @@ class SyncPromise {
 		fn(this.__data);
 		return this;
 	}
-	fail (fn) {
-		return this
+	fail () {
+		return this;
 	}
 }
 
@@ -59,8 +59,7 @@ export default connect.behavior("data-inline-cache", (baseConnect) => {
 	}
 	
 	function getData (id) {
-		var type = INLINE_CACHE[this.name];
-		window.cache2 = INLINE_CACHE;
+		var type = window.INLINE_CACHE[this.name];
 		if(type) {
 			var data = type[id];
 			if( data ) {

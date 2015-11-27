@@ -2,6 +2,35 @@ import React from 'react';
 import can from 'can';
 import Map from 'can/map/';
 
+var thingsNotToMerge = {
+	render: true,
+	ViewModel: true,
+	getInitialState: true
+};
+
+//!steal-remove-start
+var validateProto = (proto) => {
+	let vm = proto.ViewModel;
+	let gis = proto.getInitialState;
+	
+	if (!vm && !gis) {
+		can.dev.warn("You must provide either a ViewModel property or getInitialState method to CanReact.createClass.");
+	}
+
+	if (vm && gis) {
+		can.dev.warn("You using both the ViewModel property and the getInitialState method. The ViewModel property will be ignored in favor of taking the return value from getInitialState.");
+	}
+
+	if (vm && typeof vm.newInstance !== "function") {
+		can.dev.warn("The ViewModel property must be a can.Map constructor - ViewModel: can.Map.extend({...});");
+	}
+
+	if (gis && typeof gis !== "function") {
+		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");	
+	}
+};
+//!steal-remove-end
+
 class BaseComponent extends React.Component {
 	constructor(props) {
 		super(props);
@@ -69,7 +98,7 @@ export default {
 
 					//!steal-remove-start
 					if ( !(this.state instanceof Map) ) {
-						can.dev.error("When using the 'getInitialState' method with the can-react component, you must return an instance of can.Map - return new can.Map(this.props);")
+						can.dev.error("When using the 'getInitialState' method with the can-react component, you must return an instance of can.Map - return new can.Map(this.props);");
 					}
 					//!steal-remove-end
 				}
@@ -82,7 +111,7 @@ export default {
 				
 				this.renderer = can.compute(proto.render.bind(this));
 			}
-		};
+		}
 
 		// Copy all methods and properties to the new component prototype.
 		// If a BaseComponent method is defined, call the BaseComponent methods first.
@@ -113,35 +142,3 @@ export default {
 		return Component;
 	}
 };
-
-let thingsNotToMerge = {
-	render: true,
-	ViewModel: true,
-	getInitialState: true
-};
-
-//!steal-remove-start
-let validateProto = (proto) => {
-	let err = '';
-	let vm = proto.ViewModel;
-	let gis = proto.getInitialState;
-	
-	if (!vm && !gis) {
-		can.dev.warn("You must provide either a ViewModel property or getInitialState method to CanReact.createClass.");
-	}
-
-	if (vm && gis) {
-		can.dev.warn("You using both the ViewModel property and the getInitialState method. The ViewModel property will be ignored in favor of taking the return value from getInitialState.");
-	}
-
-	if (vm && typeof vm.newInstance !== "function") {
-		can.dev.warn("The ViewModel property must be a can.Map constructor - ViewModel: can.Map.extend({...});");
-	}
-
-	if (gis && typeof gis !== "function") {
-		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");	
-	}
-
-	if (err) throw new Error(err);
-};
-//!steal-remove-end
