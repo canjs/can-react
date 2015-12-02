@@ -35,9 +35,7 @@ class BaseComponent extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.changeHandler = () => {
-			return BaseComponent.prototype.changeHandler.apply(this, arguments);
-		};
+		this.changeHandler = this.changeHandler.bind(this);
 
 		this.setState = this.setState.bind(this);
 		this.forceUpdate = this.forceUpdate.bind(this);
@@ -55,15 +53,18 @@ class BaseComponent extends React.Component {
 	}
 	//!steal-remove-end
 
-	changeHandler () {
+	changeHandler (obj, oldVal, newVal) {
 		// Calling React's prototype method skips the dev-mode warning
 		// This is the only place in the app that should call forceUpdate
-		console.log('chang handler for', this.name);
+		console.log('change handler for', this.name, arguments);
+		if (this.name === "CanTodo") {
+			console.log(" ---->> Are Equal", deepEqual(oldVal, newVal))
+		}
 		React.Component.prototype.forceUpdate.call(this);
 	}
 
 	componentWillMount () {
-		console.log("Will Mount", this.name);
+		// console.log("Will Mount", this.name);
 		this.renderer.bind('change', this.changeHandler);
 	}
 
@@ -87,7 +88,12 @@ export default {
 			constructor (props) {
 				super(props);
 
-				// allow ViewModel OR getInitialState
+				//!steal-remove-start
+				if (!props.appMap || !props.appMap.pageData) {
+					can.dev.warn("(", this.name, ") When using the can-react component, it is encouraged to set the 'appMap' prop so that the component can load data asyncronously and take advantage of server side rendering: <YourComponent appMap={this.props.appMap} />");
+				}
+				//!steal-remove-end
+
 				this.state = {};
 				if (proto.ViewModel) {
 					this.state = new proto.ViewModel(props);
@@ -102,12 +108,6 @@ export default {
 					}
 					//!steal-remove-end
 				}
-
-				//!steal-remove-start
-				if (!this.state.appMap || this.state.appMap.pageData) {
-					can.dev.warn("When using the can-react component, it is encouraged to set the 'appMap' prop so that the component can load data asyncronously and take advantage of server side rendering: <YourComponent appMap={this.props.appMap} />");
-				}
-				//!steal-remove-end
 				
 				this.renderer = can.compute(proto.render.bind(this));
 			}
@@ -142,3 +142,31 @@ export default {
 		return Component;
 	}
 };
+
+var deepEqual = function (x, y) {
+  if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
+    if (Object.keys(x).length != Object.keys(y).length) {
+	  console.log("false 0", Object.keys(x), "::", Object.keys(y));
+      return false;
+    }
+
+    for (var prop in x) {
+      if (y.hasOwnProperty(prop)) { 
+        if (! deepEqual(x[prop], y[prop])) {
+          console.log("false 1");
+          return false;
+        }
+      } else {
+      	console.log("false 2", prop, "::", x[prop]);
+        return false;
+      }
+    }
+
+    return true;
+  } else if (x !== y) {
+  	console.log("false 3");
+    return false;
+  } else {
+    return true;
+  }
+}

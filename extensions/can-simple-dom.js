@@ -53,7 +53,7 @@ if (Node) {
   var oldInsert = Node.prototype.insertBefore;
   Node.prototype.insertBefore = function (node, refNode) {
     var ret = oldInsert.call(this, node);
-    // if refNode == null, the base insert calls appendChild
+    // if refNode is null, the base insert calls appendChild
     if (refNode != null) {
       reindexNodes.call(this.childNodes);
     }
