@@ -56,10 +56,6 @@ class BaseComponent extends React.Component {
 	changeHandler (obj, oldVal, newVal) {
 		// Calling React's prototype method skips the dev-mode warning
 		// This is the only place in the app that should call forceUpdate
-		console.log('change handler for', this.name, arguments);
-		if (this.name === "CanTodo") {
-			console.log(" ---->> Are Equal", deepEqual(oldVal, newVal))
-		}
 		React.Component.prototype.forceUpdate.call(this);
 	}
 
@@ -73,7 +69,6 @@ class BaseComponent extends React.Component {
 	}
 
 	render () {
-		console.log("Rendering", this.name);
 		return this.renderer();
 	}
 }
@@ -96,7 +91,7 @@ export default {
 
 				this.state = {};
 				if (proto.ViewModel) {
-					this.state = new proto.ViewModel(props);
+					this.state = new proto.ViewModel( can.extend({}, props) );
 				}
 
 				if (proto.getInitialState) {
@@ -142,31 +137,3 @@ export default {
 		return Component;
 	}
 };
-
-var deepEqual = function (x, y) {
-  if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
-    if (Object.keys(x).length != Object.keys(y).length) {
-	  console.log("false 0", Object.keys(x), "::", Object.keys(y));
-      return false;
-    }
-
-    for (var prop in x) {
-      if (y.hasOwnProperty(prop)) { 
-        if (! deepEqual(x[prop], y[prop])) {
-          console.log("false 1");
-          return false;
-        }
-      } else {
-      	console.log("false 2", prop, "::", x[prop]);
-        return false;
-      }
-    }
-
-    return true;
-  } else if (x !== y) {
-  	console.log("false 3");
-    return false;
-  } else {
-    return true;
-  }
-}
