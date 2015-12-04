@@ -53,7 +53,7 @@ class BaseComponent extends React.Component {
 	}
 	//!steal-remove-end
 
-	changeHandler (obj, oldVal, newVal) {
+	changeHandler () {
 		// Calling React's prototype method skips the dev-mode warning
 		// This is the only place in the app that should call forceUpdate
 		React.Component.prototype.forceUpdate.call(this);
