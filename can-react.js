@@ -12,6 +12,8 @@ var thingsNotToMerge = {
 var validateProto = (proto) => {
 	let vm = proto.ViewModel;
 	let gis = proto.getInitialState;
+	let render = proto.render;
+	let template = proto.template;
 	
 	if (!vm && !gis) {
 		can.dev.warn("You must provide either a ViewModel property or getInitialState method to CanReact.createClass.");
@@ -28,7 +30,19 @@ var validateProto = (proto) => {
 	if (gis && typeof gis !== "function") {
 		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");	
 	}
+
+	if (!render && !template) {
+		can.dev.warn("You must provide either a render method or template property to CanReact.createClass.")
+	}
+
+	if (render && template) {
+		can.dev.warn("You are using both the render method and template property - your render method will be overwritten. If you are needing more control over rendering, omit the template property and implement a render method which invokes the template renderer manually: render () { return renderer(this); }");
+	}
 };
+
+function misusedMethod (methodName) {
+	can.dev.warn("Calling '", methodName, "'on a component is indicative of improper use of the can-react component and will not produce the results you expect. Views should access properties using this.state.attr('propertyName') and application code should update these properties using this.state.attr('propertyName', newValue).");
+}
 //!steal-remove-end
 
 class BaseComponent extends React.Component {
@@ -42,14 +56,11 @@ class BaseComponent extends React.Component {
 	}
 
 	//!steal-remove-start
-	misusedMethod (methodName) {
-		can.dev.warn("Calling'", methodName, "'on a component is indicative of improper use of the can-react component and will not produce the results you expect. Views should access properties using this.state.attr('propertyName') and application code should update these properties using this.state.attr('propertyName', newValue).");
-	}
 	setState () {
-		return this.misusedMethod("setState");
+		misusedMethod("setState");
 	}
 	forceUpdate () {
-		return this.misusedMethod("forceUpdate");
+		misusedMethod("forceUpdate");
 	}
 	//!steal-remove-end
 
@@ -103,7 +114,13 @@ export default {
 					}
 					//!steal-remove-end
 				}
-				
+
+				if (proto.template) {
+					proto.render = function () {
+						return proto.template(this);
+					}
+				}
+
 				this.renderer = can.compute(proto.render.bind(this));
 			}
 		}
