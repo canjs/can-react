@@ -32,7 +32,7 @@ var validateProto = (proto) => {
 	}
 
 	if (!render && !template) {
-		can.dev.warn("You must provide either a render method or template property to CanReact.createClass.")
+		can.dev.warn("You must provide either a render method or template property to CanReact.createClass.");
 	}
 
 	if (render && template) {
@@ -118,7 +118,7 @@ export default {
 				if (proto.template) {
 					proto.render = function () {
 						return proto.template(this);
-					}
+					};
 				}
 
 				this.renderer = can.compute(proto.render.bind(this));

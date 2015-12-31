@@ -43,6 +43,11 @@ class SyncPromise {
 		}
 	}
 
+	catch () {
+		return this;
+	}
+
+	// done and fail are not A+ - but canjs checks these in some of its duck typing
 	done (fn) {
 		fn(this.__data);
 		return this;
@@ -87,7 +92,7 @@ export default connect.behavior("data-inline-cache", (baseConnect) => {
 		},
 
 		getData (params) {
-			var id = this.id(params);
+			var id = sortedSetJSON(params);
 			var data = getData.call(this, id);
 			if(data !== undefined) {
 				if(this.cacheConnection) {

@@ -58,7 +58,7 @@ export default function (AppState, AppComponent) {
     renderer(appMap, {document: document});
 
     return new Promise(function (resolve) {
-      appMap.readyPromise().then(function() {
+      appMap.readyPromise().then(function () {
         //!steal-remove-start
         can.dev.log("ALL READY PROMISES RESOLVED IN", Date.now() - start, "MILLISECONDS");
         //!steal-remove-end
@@ -78,8 +78,8 @@ export default function (AppState, AppComponent) {
           };
 
           resolve();
-        })
-      })
+        });
+      });
     });
   };
 
@@ -112,7 +112,7 @@ function normalizeMarkup (html) {
   // Make sure self-closing tags actually self-close
   html = html.replace(/<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]+)([^\/])>/g, "<$1$2$3/>");
   // Make sure boolean attributes have equals signs and empty value (checked="")
-  html = html.replace(/<([a-zA-Z\-]+ )([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
+  html = html.replace(/<([a-zA-Z\-]+ (?:.+['"] )?)([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
   // Unencode improperly encoded ampersands in front of html entity references
   html = html.replace(/&amp;(#?[a-z0-9]+;)/g, '&$1');
   return html;
