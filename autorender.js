@@ -109,9 +109,11 @@ export default function (AppState, AppComponent) {
  * The in-memory markup is used in node_modules/react/lib/ReactMount -> _mountImageIntoNode method.
  */
 function normalizeMarkup (html) {
+  console.log("REPLACING HTML");
   // Make sure self-closing tags actually self-close
   html = html.replace(/<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]+)([^\/])>/g, "<$1$2$3/>");
   // Make sure boolean attributes have equals signs and empty value (checked="")
+  html = html.replace(/<([a-zA-Z\-]+ (?:.+['"] )?)([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
   html = html.replace(/<([a-zA-Z\-]+ (?:.+['"] )?)([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
   // Unencode improperly encoded ampersands in front of html entity references
   html = html.replace(/&amp;(#?[a-z0-9]+;)/g, '&$1');
