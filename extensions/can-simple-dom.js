@@ -1,10 +1,45 @@
 import can from "can/util/";
 import "can/util/vdom/";
+import {HTMLSerializer, Element, Node} from "can-simple-dom";
 
 var docEl = can.global.document.documentElement;
-var Element = docEl.constructor;
 var ChildNodes = docEl.childNodes.constructor;
-var Node = Element.prototype.nodeConstructor;
+
+// React expects void tags (img, hr, input, etc) to have closing slash (with no spaces around it)
+HTMLSerializer.prototype.openTag = function(element) {
+  return '<' + element.nodeName.toLowerCase() + this.attributes(element.attributes) + (this.isVoid(element) ? '/' : '') + '>';
+};
+
+// React expects all attrubutes to have ="" (even boolean attributes such as checked must be checked="")
+HTMLSerializer.prototype.attr = function(attr) {
+  var val = "";
+  if (!attr.specified) {
+    return '';
+  }
+
+  if (attr.value) {
+    val = this.escapeAttrValue(attr.value)
+  }
+
+  return ' ' + attr.name + '="' + val + '"';
+};
+
+// This prevents can-simple-dom from improperly serializing text
+// This can maybe be removed when this is fixed: https://github.com/canjs/can-simple-dom/issues/19
+HTMLSerializer.prototype.escapeText = function(textNodeValue) {
+  return textNodeValue.replace(/[<>]|(&(#?[a-zA-Z0-9];))?/g, function(match) {
+    switch(match) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      default:
+        return match;
+    }
+  });
+};
 
 // We only want to process this code if we are using can-simple-dom.
 // can-simple-dom puts a nodeConstructor property on the Element prototype.

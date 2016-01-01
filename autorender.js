@@ -65,8 +65,7 @@ export default function (AppState, AppComponent) {
 
         // A timeout is necessary to let react finish rendering asynchronously loaded content
         setTimeout(() => {
-          // Fix markup discrepencies b/t what can-simple-dom produces and what react expects
-          let html = normalizeMarkup(document.body.firstChild.innerHTML);
+          let html = document.body.firstChild.innerHTML;
 
           // Add reacts checksum to the markup - this mimics reacts renderToString technique
           // This allows react to mount to the document without complaining or touching the DOM
@@ -93,29 +92,4 @@ export default function (AppState, AppComponent) {
     render: render,
     renderAsync: renderAsync
   };
-}
-
-/**
- * When a react component sees a "checksum" attribute on the DOM node to which it is mounting, 
- * it knows that data was rendered on the server - the checksum serves as a hash of the markup.
- * If react can reuse existing HTML, it will and will not touch the DOM. To do this,
- * react takes the state of the app and renders the app to a string in memory and creates a checksum. 
- * This checksum must match EXACTLY the server-side generated checksum. If there is so much as an extra space
- * rendered on the server but not in the client, the checksums wont match and react will bark at you claiming
- * that you are impure and should not exist as a person. The only way I have found to compare the two
- * is to console log the HTML being generated in memory and compare that to the "view source" HTML.
- * The discrepency should be small.
- *
- * The in-memory markup is used in node_modules/react/lib/ReactMount -> _mountImageIntoNode method.
- */
-function normalizeMarkup (html) {
-  console.log("REPLACING HTML");
-  // Make sure self-closing tags actually self-close
-  html = html.replace(/<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]+)([^\/])>/g, "<$1$2$3/>");
-  // Make sure boolean attributes have equals signs and empty value (checked="")
-  html = html.replace(/<([a-zA-Z\-]+ (?:.+['"] )?)([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
-  html = html.replace(/<([a-zA-Z\-]+ (?:.+['"] )?)([a-zA-Z\-]+)([ \>\\])/g, '<$1$2=""$3');
-  // Unencode improperly encoded ampersands in front of html entity references
-  html = html.replace(/&amp;(#?[a-z0-9]+;)/g, '&$1');
-  return html;
 }
