@@ -18,7 +18,7 @@ HTMLSerializer.prototype.attr = function(attr) {
   }
 
   if (attr.value) {
-    val = this.escapeAttrValue(attr.value)
+    val = this.escapeAttrValue(attr.value);
   }
 
   return ' ' + attr.name + '="' + val + '"';
