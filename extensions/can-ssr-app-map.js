@@ -18,8 +18,10 @@ AppMap.prototype.waitFor = function(promise) {
 
 		if (this.__readyPromises.length === 0) {
 			setTimeout(() => {
-				this.__readyPromise.resolve();
-			}, 1);
+				if (this.__readyPromises.length === 0) {
+					this.__readyPromise.resolve();
+				}
+			});
 		}
 	});
 

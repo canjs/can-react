@@ -94,12 +94,6 @@ export default {
 			constructor (props) {
 				super(props);
 
-				//!steal-remove-start
-				if (!props.appMap || !props.appMap.pageData) {
-					can.dev.warn("(", this.name, ") When using the can-react component, it is encouraged to set the 'appMap' prop so that the component can load data asyncronously and take advantage of server side rendering: <YourComponent appMap={this.props.appMap} />");
-				}
-				//!steal-remove-end
-
 				this.state = {};
 				if (proto.ViewModel) {
 					this.state = new proto.ViewModel( can.extend({}, props) );
