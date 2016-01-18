@@ -6,11 +6,6 @@ var isNode = typeof process === "object" && {}.toString.call(process) === "[obje
 var docEl = can.global.document.documentElement;
 var ChildNodes = docEl.childNodes.constructor;
 
-// Basic implementation of EventTarget is needed
-Node.prototype.addEventListener = function () {};
-Node.prototype.removeEventListener = function () {};
-Node.prototype.dispatchEvent = function () {};
-
 // can-simple-dom doesn't put a slash on void tags (img, hr, input, etc).
 // React expects void tags to have closing slash (with no spaces around it)
 HTMLSerializer.prototype.openTag = function(element) {
@@ -107,6 +102,16 @@ var reindexNodes = function reindexNodes () {
 };
 
 if (isNode) {
+  // jQuery depends on document.defaultView for some of its support tests
+  // jQuery also depends on getComputedStyle on the window as well
+  can.global.document.defaultView = window;
+  window.getComputedStyle = function () {};
+
+  // Basic implementation of EventTarget is needed
+  Node.prototype.addEventListener = function () {};
+  Node.prototype.removeEventListener = function () {};
+  Node.prototype.dispatchEvent = function () {};
+
   // Add support for childNodes.length
   if (Object.defineProperty) {
     Object.defineProperty(ChildNodes.prototype, "length", {

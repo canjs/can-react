@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import can from 'can';
 import Map from 'can/map/';
 
@@ -77,6 +78,7 @@ class BaseComponent extends React.Component {
 
 	componentDidMount () {
 		this._isMounted = true;
+		this.element = ReactDOM.findDOMNode(this);
 	}
 
 	componentWillUnmount () {
