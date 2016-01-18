@@ -75,7 +75,12 @@ class BaseComponent extends React.Component {
 		this.renderer.bind('change', this.changeHandler);
 	}
 
+	componentDidMount () {
+		this._isMounted = true;
+	}
+
 	componentWillUnmount () {
+		this._isMounted = false;
 		this.renderer.unbind('change', this.changeHandler);
 	}
 
