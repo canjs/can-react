@@ -117,11 +117,7 @@ if (isNode) {
     Object.defineProperty(ChildNodes.prototype, "length", {
       get: function () {
         if (!this._length) {
-          try {
-            reindexNodes.call(this);
-          } catch (ex) {
-            debugger;
-          }
+          reindexNodes.call(this);
         }
 
         return this._length;
