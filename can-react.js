@@ -51,9 +51,20 @@ class BaseComponent extends React.Component {
 		super(props);
 
 		this.changeHandler = this.changeHandler.bind(this);
+	}
 
-		this.setState = this.setState.bind(this);
-		this.forceUpdate = this.forceUpdate.bind(this);
+	// I don't like this - but there needs to be a reliable way to generate unique IDs
+	// that are deterministic - the same on both the server and the client. This is 
+	// temporary but works until we can find a better way. Read more about it:
+	// https://github.com/facebook/react/issues/5867
+	getUniqueId (prefix) {
+		if ( !this._uniqueIdIndex ) {
+			this._uniqueIdIndex = 0;
+		}
+		if (this._reactInternalInstance && this._reactInternalInstance._rootNodeID) {
+			prefix = (prefix || "") + this._reactInternalInstance._rootNodeID + "_";
+		}
+		return prefix + this._uniqueIdIndex++;
 	}
 
 	//!steal-remove-start
