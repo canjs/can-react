@@ -76,7 +76,14 @@ class BaseComponent extends React.Component {
 	}
 	//!steal-remove-end
 
-	changeHandler () {
+	changeHandler (obj, prop) {
+		// If changes come in during mounting or updating, we need to buffer
+		// those changes and apply them later. TODO: shared event queue.
+		if (!this._isMounted || this._isUpdating) {
+			clearTimeout(this.__updateTimer);
+			this.__updateTimer = setTimeout(this.changeHandler, 40);
+			return;
+		}
 		// Calling React's prototype method skips the dev-mode warning
 		// This is the only place in the app that should call forceUpdate
 		React.Component.prototype.forceUpdate.call(this);
@@ -90,6 +97,14 @@ class BaseComponent extends React.Component {
 	componentDidMount () {
 		this._isMounted = true;
 		this.element = ReactDOM.findDOMNode(this);
+	}
+
+	componentWillUpdate () {
+		this.__isUpdating = true;
+	}
+
+	componentDidUpdate () {
+		this.__isUpdating = false;
 	}
 
 	componentWillUnmount () {
