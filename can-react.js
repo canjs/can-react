@@ -76,7 +76,7 @@ class BaseComponent extends React.Component {
 	}
 	//!steal-remove-end
 
-	changeHandler (obj, prop) {
+	changeHandler (ev, oldVal, newVal) {
 		// If changes come in during mounting or updating, we need to buffer
 		// those changes and apply them later. TODO: shared event queue.
 		if (!this._isMounted || this._isUpdating) {

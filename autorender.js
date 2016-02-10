@@ -76,6 +76,7 @@ export default function (AppState, AppComponent) {
           // Add reacts checksum to the markup - this mimics reacts renderToString technique
           // This allows react to mount to the document without complaining or touching the DOM
           html = ReactMarkupChecksum.addChecksumToMarkup(html);
+          html = html.replace('</body>', '<script>var INLINE_CACHE = ' + JSON.stringify(appMap.__pageData) + ';</script></body>');
 
           // can-ssr uses document.body.innerHHTML to send output to browser
           document.body = {
