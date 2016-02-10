@@ -3,6 +3,7 @@ import ReactDom from "react-dom";
 import ReactMarkupChecksum from "react/lib/ReactMarkupChecksum";
 
 import can from 'can/util/';
+import vdoc from 'can/util/vdom/document/';
 import route from "can/route/";
 import 'can/route/pushstate/';
 import 'can-react/extensions/';
@@ -25,6 +26,11 @@ export default function (AppState, AppComponent) {
     var container = IS_BROWSER ? doc : doc.createElement("div");
 
     if (!IS_BROWSER) {
+      // This condition can be removed once things are stable using CanJS v2.3.15+
+      // We should just be able to add the serializer directly without checking.
+      if (doc.__addSerializerAndParser) {
+        doc.__addSerializerAndParser(vdoc.__serializer, vdoc.__parser);
+      }
       doc.body.appendChild(container);
     }
 

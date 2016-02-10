@@ -36,7 +36,7 @@ AppMap.prototype.waitFor = function(promise) {
 		this.__pluckPromise(promise);
 	}, (err) => {
 		//!steal-remove-start
-		console.log("༼ つ ◕_◕ ༽つ ~~~ A promise has failed to hold up its end of the bargain!!! \nPromise source:", parentFile, "\nERROR:", err);
+		console.log("༼ つ ◕_◕ ༽つ ~~~ A promise has failed to hold up its end of the bargain!!! \nPromise source:", parentFile, "\nERROR:", (err.stack || err));
 		//!steal-remove-end
 		this.__pluckPromise(promise);
 	});
