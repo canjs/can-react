@@ -78,6 +78,11 @@ export default function (AppState, AppComponent) {
           html = ReactMarkupChecksum.addChecksumToMarkup(html);
           html = html.replace('</body>', '<script>var INLINE_CACHE = ' + JSON.stringify(appMap.__pageData) + ';</script></body>');
 
+          // Write the component cache to the output (see can-react component)
+          if (typeof window !== "undefined" && window.COMPONENT_CACHE) {
+            html = html.replace("</body>", "<script>var COMPONENT_CACHE = " + JSON.stringify(window.COMPONENT_CACHE) + ";</script></body>")
+          }
+
           // can-ssr uses document.body.innerHHTML to send output to browser
           document.body = {
             innerHTML: html
