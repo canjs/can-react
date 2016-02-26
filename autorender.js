@@ -77,6 +77,11 @@ export default function (AppState, AppComponent) {
           // This allows react to mount to the document without complaining or touching the DOM
           html = ReactMarkupChecksum.addChecksumToMarkup(html);
 
+          // Write the component cache to the output (see can-react component)
+          if (typeof window !== "undefined" && window.COMPONENT_CACHE) {
+            html = html.replace("</body>", "<script>var COMPONENT_CACHE = " + JSON.stringify(window.COMPONENT_CACHE) + ";</script></body>")
+          }
+
           // can-ssr uses document.body.innerHHTML to send output to browser
           document.body = {
             innerHTML: html
