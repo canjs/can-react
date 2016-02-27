@@ -7,7 +7,6 @@ var isNode = (typeof process === 'object' && {}.toString.call(process) === '[obj
 
 var thingsNotToMerge = {
 	render: true,
-	ViewModel: true,
 	getInitialState: true,
 	template: true
 };
@@ -198,22 +197,27 @@ export default {
 			constructor (props) {
 				super(props);
 
-				this.state = {};
-				if (proto.ViewModel) {
-					this.state = new proto.ViewModel( can.extend({}, props) );
-				}
-
-				if (proto.getInitialState) {
-					this.state = proto.getInitialState.call(this);
-
-					//!steal-remove-start
-					if ( !(this.state instanceof Map) ) {
-						can.dev.error("When using the 'getInitialState' method with the can-react component, you must return an instance of can.Map - return new can.Map(this.props);");
+				if (props.__initialState) {
+					// This is used during server side rendering. The app viewModel is
+					// instantiated _before_ the component is initialized, and the state
+					// is passed in on the __initialState prop.
+					this.state = props.__initialState;
+				} else {
+					this.state = {};
+					if (proto.ViewModel) {
+						this.state = new proto.ViewModel( can.extend({}, props) );
 					}
-					//!steal-remove-end
-				}
 
-				applyComponentCache.call(this);
+					if (proto.getInitialState) {
+						this.state = proto.getInitialState.call(this);
+
+						//!steal-remove-start
+						if ( !(this.state instanceof Map) ) {
+							can.dev.error("When using the 'getInitialState' method with the can-react component, you must return an instance of can.Map - return new can.Map(this.props);");
+						}
+						//!steal-remove-end
+					}
+				}
 
 				if (proto.template) {
 					proto.render = function () {
@@ -221,6 +225,7 @@ export default {
 					};
 				}
 
+				applyComponentCache.call(this);
 				this.renderer = can.compute(proto.render.bind(this));
 			}
 		}
