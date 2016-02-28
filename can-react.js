@@ -89,7 +89,7 @@ class BaseComponent extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.__id = getStaticUniqueId.call(this)
+		this.__id = getStaticUniqueId.call(this);
 		this.changeHandler = this.changeHandler.bind(this);
 	}
 
@@ -116,7 +116,7 @@ class BaseComponent extends React.Component {
 	}
 	//!steal-remove-end
 
-	changeHandler (obj, prop) {
+	changeHandler () {
 		// If not mounted, don't do anything. If it's about to mount, it will render
 		// the proper state when it mounts. If it has been unmounted... well, hopefully we 
 		// don't have a memory leak.
