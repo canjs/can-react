@@ -17,7 +17,7 @@ var validateProto = (proto) => {
 	let gis = proto.getInitialState;
 	let render = proto.render;
 	let template = proto.template;
-	
+
 	if (!vm && !gis) {
 		can.dev.warn("You must provide either a ViewModel property or getInitialState method to CanReact.createClass.");
 	}
@@ -31,7 +31,7 @@ var validateProto = (proto) => {
 	}
 
 	if (gis && typeof gis !== "function") {
-		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");	
+		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");
 	}
 
 	if (!render && !template) {
@@ -94,7 +94,7 @@ class BaseComponent extends React.Component {
 	}
 
 	// I don't like this - but there needs to be a reliable way to generate unique IDs
-	// that are deterministic - the same on both the server and the client. This is 
+	// that are deterministic - the same on both the server and the client. This is
 	// temporary but works until we can find a better way. Read more about it here:
 	// https://github.com/facebook/react/issues/5867
 	getUniqueId (prefix) {
@@ -103,7 +103,7 @@ class BaseComponent extends React.Component {
 		}
 
 		prefix = (prefix || "") + this.__id + "_";
-		
+
 		return prefix + this._uniqueIdIndex++;
 	}
 
@@ -118,14 +118,14 @@ class BaseComponent extends React.Component {
 
 	changeHandler () {
 		// If not mounted, don't do anything. If it's about to mount, it will render
-		// the proper state when it mounts. If it has been unmounted... well, hopefully we 
+		// the proper state when it mounts. If it has been unmounted... well, hopefully we
 		// don't have a memory leak.
 		if (!this._isMounted) {
 			return;
 		}
 
-		// If the component tries to update itself while rendering, then we need to 
-		// buffer the update and apply it later. This most likely happens when a child component 
+		// If the component tries to update itself while rendering, then we need to
+		// buffer the update and apply it later. This most likely happens when a child component
 		// updates its parent (ex. Page component sets the AppState page title during mount).
 		// During SSR, we want to save the new state to the COMPONENT_CACHE so that it's
 		// used during initial render on the client.
@@ -136,7 +136,7 @@ class BaseComponent extends React.Component {
 		}
 
 		if (isNode) {
-			// If this flag is set to true, then delete any state that was previously saved to the 
+			// If this flag is set to true, then delete any state that was previously saved to the
 			// COMPONENT_CACHE as it's now stale. If this new state needs to be saved, we do that below.
 			if (this.__deleteCachedState) {
 				deleteComponentCache.call(this);
@@ -144,7 +144,7 @@ class BaseComponent extends React.Component {
 			}
 
 			// If we are about to render a buffered update, we want to save the data to
-			// COMPONENT_CACHE for use during initial render in the client. We also set a flag 
+			// COMPONENT_CACHE for use during initial render in the client. We also set a flag
 			// so that if the state changes again, we delete the data in the COMPONENT_CACHE
 			// since it will be stale.
 			if (this.__saveNextState) {
@@ -254,6 +254,15 @@ export default {
 			} else {
 				Component.prototype[prop] = newVal;
 			}
+		});
+
+		// set Function.name to proto.name, this way the React Dev Tools
+		// shows the correct tag name instead of a generic "Component".
+		Object.defineProperty(Component, "name", {
+			writable: false,
+			enumerable: false,
+			configurable: true,
+			value: proto.name || "UnnamedComponent"
 		});
 
 		return Component;
