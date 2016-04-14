@@ -15,7 +15,7 @@ var validateProto = (proto) => {
 	let gis = proto.getInitialState;
 	let render = proto.render;
 	let template = proto.template;
-	
+
 	if (!vm && !gis) {
 		can.dev.warn("You must provide either a ViewModel property or getInitialState method to CanReact.createClass.");
 	}
@@ -29,7 +29,7 @@ var validateProto = (proto) => {
 	}
 
 	if (gis && typeof gis !== "function") {
-		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");	
+		can.dev.warn("getInitialState must be a function which returns an instance of a can.Map - return new ViewModel();");
 	}
 
 	if (!render && !template) {
@@ -54,7 +54,7 @@ class BaseComponent extends React.Component {
 	}
 
 	// I don't like this - but there needs to be a reliable way to generate unique IDs
-	// that are deterministic - the same on both the server and the client. This is 
+	// that are deterministic - the same on both the server and the client. This is
 	// temporary but works until we can find a better way. Read more about it:
 	// https://github.com/facebook/react/issues/5867
 	getUniqueId (prefix) {
@@ -176,6 +176,15 @@ export default {
 			} else {
 				Component.prototype[prop] = newVal;
 			}
+		});
+
+		// set Function.name to proto.name, this way the React Dev Tools
+		// shows the correct tag name instead of a generic "Component".
+		Object.defineProperty(Component, "name", {
+			writable: false,
+			enumerable: false,
+			configurable: true,
+			value: proto.name || "UnnamedComponent"
 		});
 
 		return Component;
