@@ -26,12 +26,12 @@ AppMap.prototype.waitFor = function(promise) {
 	this.__readyPromises.push(promise);
 
 	//!steal-remove-start
-	// Clever little way of getting the module path and line 
+	// Clever little way of getting the module path and line
 	// number where this promise is defined (3rd line of stack).
 	var err = new Error();
 	var parentFile = err.stack.split(/[\r\n]/)[2].split("/").slice(1).join("/");
 	//!steal-remove-end
-	
+
 	promise.then(() => {
 		this.__pluckPromise(promise);
 	}, (err) => {
