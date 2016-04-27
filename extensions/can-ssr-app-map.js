@@ -20,7 +20,7 @@ AppMap.prototype.__pluckPromise = function (promise) {
 			}
 		});
 	}
-};
+}
 
 AppMap.prototype.waitFor = function(promise) {
 	this.__readyPromises.push(promise);
