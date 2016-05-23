@@ -29,7 +29,7 @@ AppMap.prototype.waitFor = function(promise) {
 	// Clever little way of getting the module path and line
 	// number where this promise is defined (3rd line of stack).
 	var err = new Error();
-	var parentFile = err.stack.split(/[\r\n]/)[2].split("/").slice(1).join("/");
+	var parentFile = err.stack && err.stack.split(/\r?\n/)[2].split("/").slice(1).join("/") || "err.stack undefined";
 	//!steal-remove-end
 
 	promise.then(() => {
