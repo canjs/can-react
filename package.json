@@ -1,6 +1,6 @@
 {
   "name": "can-react",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "A compatibility layer required to enable donejs-react.",
   "main": "can-react.js",
   "scripts": {
