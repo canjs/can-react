@@ -178,14 +178,19 @@ export default {
 			}
 		});
 
-		// set Function.name to proto.name, this way the React Dev Tools
-		// shows the correct tag name instead of a generic "Component".
-		Object.defineProperty(Component, "name", {
-			writable: false,
-			enumerable: false,
-			configurable: true,
-			value: proto.name || "UnnamedComponent"
-		});
+		// Prevent Safari from throwing with a TypeError
+		try {
+			// set Function.name to proto.name, this way the React Dev Tools
+			// shows the correct tag name instead of a generic "Component".
+			Object.defineProperty(Component, "name", {
+				writable: false,
+				enumerable: false,
+				configurable: true,
+				value: proto.name || "UnnamedComponent"
+			});
+		} catch (e) {
+			console.log('Failed to set Component name', e);
+		}
 
 		return Component;
 	}
