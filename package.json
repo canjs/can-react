@@ -24,16 +24,16 @@
   },
   "homepage": "https://github.com/canjs/can-react#readme",
   "dependencies": {
-    "can": "~2.3.2",
-    "can-connect": "~0.3.3",
-    "can-simple-dom": "0.3.0",
-    "can-ssr": "~0.10.1",
-    "jquery": "~2.1.4",
-    "react": "~0.14.3",
-    "react-dom": "~0.14.3"
+    "can": "~3.2.2",
+    "can-connect": "~1.0.15",
+    "can-simple-dom": "1.0.2",
+    "can-ssr": "~0.11.7",
+    "jquery": "~3.1.1",
+    "react": "~15.4.1",
+    "react-dom": "~15.4.1"
   },
   "devDependencies": {
-    "documentjs": "^0.3.6",
+    "documentjs": "^0.4.4",
     "jshint": "^2.8.0"
   }
 }
