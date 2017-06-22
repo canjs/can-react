@@ -24,21 +24,18 @@ import React from 'react';
  * </div> --> </html>
  * ```
  */
-export default React.createClass({
-  render() {
-    const isServer = typeof process === 'object' && {}.toString.call(process) === '[object process]';
-    const tag = isServer ? 'div' : this.props['data-node'];
-    const attributes = Object.keys(this.props).reduce(
-      (aggregate, key) => {
-        if (key !== 'children') {
-          aggregate[key] = this.props[key];
-        }
+export default React.createClass({ // eslint-disable-line react/no-deprecated
+	render() {
+		const isServer = typeof process === 'object' && {}.toString.call(process) === '[object process]';
+		const tag = isServer ? 'div' : this.props['data-node'];
+		const attributes = Object.keys(this.props).reduce((aggregate, key) => {
+			if (key !== 'children') {
+				aggregate[key] = this.props[key];
+			}
 
-        return aggregate;
-      },
-      {}
-    );
+			return aggregate;
+		}, {});
 
-    return React.createElement(tag, attributes, this.props.children);
-  }
+		return React.createElement(tag, attributes, this.props.children);
+	}
 });

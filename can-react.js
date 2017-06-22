@@ -96,7 +96,7 @@ class BaseComponent extends React.Component {
 
 	componentDidMount () {
 		this._isMounted = true;
-		this.element = ReactDOM.findDOMNode(this);
+		this.element = ReactDOM.findDOMNode(this); // eslint-disable-line react/no-find-dom-node
 	}
 
 	componentWillUpdate () {
@@ -189,7 +189,7 @@ export default {
 				value: proto.name || "UnnamedComponent"
 			});
 		} catch (e) {
-			console.log('Failed to set Component name', e);
+			console.log('Failed to set Component name', e); // eslint-disable-line no-console
 		}
 
 		return Component;
