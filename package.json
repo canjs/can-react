@@ -5,8 +5,7 @@
   "main": "can-react.js",
   "scripts": {
     "test": "npm run jshint",
-    "jshint": "jshint can-react.js extensions/. --config",
-    "document": "documentjs"
+    "jshint": "jshint can-react.js extensions/. --config"
   },
   "repository": {
     "type": "git",
