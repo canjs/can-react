@@ -25,7 +25,7 @@
   "homepage": "https://github.com/canjs/can-react#readme",
   "dependencies": {
     "can": "~3.6.0",
-    "can-connect": "~1.5.5",
+    "can-connect": "~3.0.7",
     "can-simple-dom": "1.0.8",
     "can-ssr": "~0.11.7",
     "jquery": "~3.2.1",
