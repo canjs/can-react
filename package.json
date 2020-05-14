@@ -34,6 +34,6 @@
   },
   "devDependencies": {
     "documentjs": "^0.4.4",
-    "jshint": "^2.8.0"
+    "jshint": "^2.11.1"
   }
 }
